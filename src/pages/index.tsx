@@ -1,12 +1,13 @@
 import { type NextPage } from "next"
 import Head from "next/head"
 import Link from "next/link"
-import { signIn, signOut, useSession } from "next-auth/react"
+import { signOut, useSession } from "next-auth/react"
 
 import { api } from "../utils/api"
 
 const Home: NextPage = () => {
   const { data: pokemons } = api.pokemon.list.useQuery()
+  const { data: session } = useSession()
 
   return (
     <>
@@ -17,6 +18,10 @@ const Home: NextPage = () => {
       </Head>
 
       <main className="container mx-auto my-16 space-y-8 text-slate-700">
+        <div className="flex gap-2">
+          <span>Hi, {session?.user.name}</span>
+          <button onClick={() => signOut()}>Sign out</button>
+        </div>
         <h1 className="text-4xl font-bold">Pokemon List</h1>
         <Link
           href="/pokemon/new"

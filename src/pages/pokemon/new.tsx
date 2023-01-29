@@ -26,7 +26,6 @@ const AddPokemon = () => {
       <main className="container mx-auto mt-16 text-slate-700">
         <Link href="/">Back</Link>
         <h1 className="mb-16 text-center text-4xl">Add Pokemon</h1>
-        {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
         <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
           <label className="gap2 flex flex-col">
             <span>Name</span>

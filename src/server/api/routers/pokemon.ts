@@ -1,14 +1,14 @@
 import { z } from "zod"
 import { pokemonSchema } from "../../../schema/pokemon"
-import { createTRPCRouter, publicProcedure } from "../trpc"
+import { createTRPCRouter, protectedProcedure } from "../trpc"
 
 export const pokemonRouter = createTRPCRouter({
-  list: publicProcedure.query(async ({ ctx }) => {
+  list: protectedProcedure.query(async ({ ctx }) => {
     const data = await ctx.prisma.pokemon.findMany()
     return data
   }),
 
-  findOne: publicProcedure
+  findOne: protectedProcedure
     .input(
       z.object({
         id: z.string(),
@@ -22,7 +22,7 @@ export const pokemonRouter = createTRPCRouter({
       })
     }),
 
-  create: publicProcedure
+  create: protectedProcedure
     .input(pokemonSchema)
     .mutation(async ({ ctx, input }) => {
       const pokemon = await ctx.prisma.pokemon.create({

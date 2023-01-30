@@ -8,8 +8,8 @@ import { pokemonRouter } from "./routers/pokemon"
  * All routers added in /api/routers should be manually added here
  */
 export const appRouter = createTRPCRouter({
-  example: exampleRouter,
-  pokemon: pokemonRouter,
+    example: exampleRouter,
+    pokemon: pokemonRouter,
 })
 
 // export type definition of API

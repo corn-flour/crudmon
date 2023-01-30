@@ -3,17 +3,17 @@ import { z } from "zod"
 import { createTRPCRouter, publicProcedure, protectedProcedure } from "../trpc"
 
 export const exampleRouter = createTRPCRouter({
-  hello: publicProcedure.query(() => {
-    return {
-      name: "John Doe",
-    }
-  }),
+    hello: publicProcedure.query(() => {
+        return {
+            name: "John Doe",
+        }
+    }),
 
-  getAll: publicProcedure.query(({ ctx }) => {
-    return ctx.prisma.example.findMany()
-  }),
+    getAll: publicProcedure.query(({ ctx }) => {
+        return ctx.prisma.example.findMany()
+    }),
 
-  getSecretMessage: protectedProcedure.query(() => {
-    return "you can now see this secret message!"
-  }),
+    getSecretMessage: protectedProcedure.query(() => {
+        return "you can now see this secret message!"
+    }),
 })

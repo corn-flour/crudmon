@@ -11,7 +11,7 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
         const id = useId()
 
         return (
-            <div className="relative rounded-t bg-slate-200">
+            <div className="relative mb-4 rounded-t bg-slate-200">
                 <input
                     type="text"
                     id={id}
@@ -19,12 +19,20 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
                     {...rest}
                     placeholder={label}
                     className={clsx(
-                        "peer relative w-full border-b-2 border-slate-400 bg-transparent px-4 pb-2 pt-6 text-sm text-slate-600 placeholder-transparent outline-none transition-all focus:border-blue-700"
+                        "peer relative w-full border-b-2 bg-transparent px-4 pb-2 pt-6 text-sm text-slate-600 placeholder-transparent outline-none transition-all ",
+                        !errorMessage
+                            ? "border-slate-400 focus:border-blue-700"
+                            : "border-pink-700"
                     )}
                 />
                 <label
                     htmlFor={id}
-                    className="absolute left-4 top-2 z-10 text-xs text-slate-500 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:text-sm peer-focus:top-2 peer-focus:translate-y-0 peer-focus:text-xs peer-focus:text-blue-700"
+                    className={clsx(
+                        "absolute left-4 top-2 z-10 cursor-text text-xs transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:text-sm peer-required:after:text-red-700 peer-required:after:content-['_*'] peer-focus:top-2 peer-focus:translate-y-0 peer-focus:text-xs",
+                        !errorMessage
+                            ? " text-slate-500 peer-focus:text-blue-700"
+                            : "text-pink-700"
+                    )}
                 >
                     {label}
                 </label>

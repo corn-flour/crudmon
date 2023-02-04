@@ -31,7 +31,10 @@ export const pokemonRouter = createTRPCRouter({
         .input(pokemonSchema)
         .mutation(async ({ ctx, input }) => {
             const pokemon = await ctx.prisma.pokemon.create({
-                data: input,
+                data: {
+                    ...input,
+                    name: input.name.trim().toLowerCase(),
+                },
             })
 
             return pokemon

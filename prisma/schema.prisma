@@ -67,7 +67,7 @@ model VerificationToken {
 
 model Ability {
     id            String    @id @default(cuid())
-    name          String
+    name          String    @unique
     description   String
     pokemonOne    Pokemon[] @relation("PokemonAbilityOne")
     pokemonTwo    Pokemon[] @relation("PokemonAbilityTwo")
@@ -76,7 +76,7 @@ model Ability {
 
 model Pokemon {
     id              String   @id @default(cuid())
-    name            String
+    name            String   @unique
     abilityOneId    String
     abilityTwoId    String?
     hiddenAbilityId String?

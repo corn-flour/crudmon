@@ -25,7 +25,10 @@ export const abilityRouter = createTRPCRouter({
         )
         .mutation(async ({ ctx, input }) => {
             const result = await ctx.prisma.ability.create({
-                data: input,
+                data: {
+                    name: input.name.trim().toLowerCase(),
+                    description: input.description,
+                },
             })
             return {
                 success: true,

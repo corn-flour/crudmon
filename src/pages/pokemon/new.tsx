@@ -49,8 +49,9 @@ const AddPokemon = () => {
                         <select
                             id="ability-1"
                             {...register("abilityOneId")}
-                            defaultValue={abilities?.[0]?.id}
+                            defaultValue=""
                         >
+                            <option value="">none</option>
                             {abilities?.map((ability) => (
                                 <option key={ability.id} value={ability.id}>
                                     {ability.name}
@@ -83,10 +84,14 @@ const AddPokemon = () => {
                         <label htmlFor="hidden-ability">Hidden Ability</label>
                         <select
                             id="hidden-ability"
-                            {...register("hiddenAbilityId")}
-                            defaultValue={undefined}
+                            {...register("hiddenAbilityId", {
+                                setValueAs: (v: string) => {
+                                    return v === "" ? undefined : v
+                                },
+                            })}
+                            defaultValue={""}
                         >
-                            <option value={undefined}>None</option>
+                            <option value={""}>none</option>
                             {abilities?.map((ability) => (
                                 <option key={ability.id} value={ability.id}>
                                     {ability.name}

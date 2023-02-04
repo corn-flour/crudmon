@@ -19,6 +19,11 @@ export const pokemonRouter = createTRPCRouter({
                 where: {
                     id: input.id,
                 },
+                include: {
+                    abilityOne: true,
+                    abilityTwo: true,
+                    hiddenAbility: true,
+                },
             })
         }),
 

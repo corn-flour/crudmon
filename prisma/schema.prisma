@@ -65,10 +65,24 @@ model VerificationToken {
     @@unique([identifier, token])
 }
 
+model Ability {
+    id            String    @id @default(cuid())
+    name          String
+    description   String
+    pokemonOne    Pokemon[] @relation("PokemonAbilityOne")
+    pokemonTwo    Pokemon[] @relation("PokemonAbilityTwo")
+    pokemonHidden Pokemon[] @relation("PokemonHiddenAbility")
+}
+
 model Pokemon {
-    id      String  @id @default(cuid())
-    name    String
-    ability String
-    typeOne String
-    typeTwo String?
+    id              String   @id @default(cuid())
+    name            String
+    abilityOneId    String
+    abilityTwoId    String?
+    hiddenAbilityId String?
+    abilityOne      Ability  @relation("PokemonAbilityOne", fields: [abilityOneId], references: [id])
+    abilityTwo      Ability? @relation("PokemonAbilityTwo", fields: [abilityTwoId], references: [id])
+    hiddenAbility   Ability? @relation("PokemonHiddenAbility", fields: [hiddenAbilityId], references: [id])
+    typeOne         String
+    typeTwo         String?
 }

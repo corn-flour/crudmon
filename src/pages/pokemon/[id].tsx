@@ -21,7 +21,14 @@ const PokemonInfo = () => {
                 <h1 className="text-4xl font-bold">{pokemon?.name}</h1>
                 <div className="space-y-4">
                     <p>Id: {pokemon?.id}</p>
-                    <p>Ability: {pokemon?.ability}</p>
+                    <p>
+                        Ability: {pokemon?.abilityOne.name}{" "}
+                        {!!pokemon?.abilityTwo &&
+                            `, ${pokemon.abilityTwo.name}`}
+                    </p>
+                    <p>
+                        Hidden ability: {pokemon?.hiddenAbility?.name ?? "None"}
+                    </p>
                     <p>
                         Type: {pokemon?.typeOne}
                         {!!pokemon?.typeTwo && `, ${pokemon.typeTwo}`}

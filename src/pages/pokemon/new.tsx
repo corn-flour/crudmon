@@ -17,6 +17,8 @@ const AddPokemon = () => {
 
     const router = useRouter()
 
+    const { data: abilities } = api.abilities.list.useQuery()
+
     const mutation = api.pokemon.create.useMutation({
         onSuccess: () => router.push("/"),
     })
@@ -41,12 +43,58 @@ const AddPokemon = () => {
                         required
                         errorMessage={errors?.name?.message}
                     />
-                    <TextInput
-                        label="Ability"
-                        {...register("ability")}
-                        required
-                        errorMessage={errors?.ability?.message}
-                    />
+
+                    <div>
+                        <label htmlFor="ability-1">Ability 1</label>
+                        <select
+                            id="ability-1"
+                            {...register("abilityOneId")}
+                            defaultValue={abilities?.[0]?.id}
+                        >
+                            {abilities?.map((ability) => (
+                                <option key={ability.id} value={ability.id}>
+                                    {ability.name}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+
+                    <div>
+                        <label htmlFor="ability-2">Ability 2</label>
+                        <select
+                            id="ability-2"
+                            {...register("abilityTwoId", {
+                                setValueAs: (v: string) => {
+                                    return v === "" ? undefined : v
+                                },
+                            })}
+                            defaultValue=""
+                        >
+                            <option value="">none</option>
+                            {abilities?.map((ability) => (
+                                <option key={ability.id} value={ability.id}>
+                                    {ability.name}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+
+                    <div>
+                        <label htmlFor="hidden-ability">Hidden Ability</label>
+                        <select
+                            id="hidden-ability"
+                            {...register("hiddenAbilityId")}
+                            defaultValue={undefined}
+                        >
+                            <option value={undefined}>None</option>
+                            {abilities?.map((ability) => (
+                                <option key={ability.id} value={ability.id}>
+                                    {ability.name}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+
                     <TextInput
                         label="Type 1"
                         {...register("typeOne")}

@@ -39,4 +39,18 @@ export const pokemonRouter = createTRPCRouter({
 
             return pokemon
         }),
+
+    delete: protectedProcedure
+        .input(z.object({ id: z.string() }))
+        .mutation(async ({ ctx, input }) => {
+            const pokemon = await ctx.prisma.pokemon.delete({
+                where: {
+                    id: input.id,
+                },
+            })
+            return {
+                success: true,
+                pokemon,
+            }
+        }),
 })

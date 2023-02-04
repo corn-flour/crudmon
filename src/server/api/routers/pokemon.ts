@@ -53,4 +53,19 @@ export const pokemonRouter = createTRPCRouter({
                 pokemon,
             }
         }),
+
+    update: protectedProcedure
+        .input(z.object({ id: z.string(), data: pokemonSchema.partial() }))
+        .mutation(async ({ ctx, input }) => {
+            const pokemon = await ctx.prisma.pokemon.update({
+                where: {
+                    id: input.id,
+                },
+                data: input.data,
+            })
+            return {
+                success: true,
+                pokemon,
+            }
+        }),
 })

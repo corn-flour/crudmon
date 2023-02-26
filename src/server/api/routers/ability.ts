@@ -1,12 +1,12 @@
 import { z } from "zod"
-import { createTRPCRouter, protectedProcedure } from "../trpc"
+import { createTRPCRouter, publicProcedure } from "../trpc"
 
 export const abilityRouter = createTRPCRouter({
-    list: protectedProcedure.query(({ ctx }) => {
+    list: publicProcedure.query(({ ctx }) => {
         return ctx.prisma.ability.findMany()
     }),
 
-    findOne: protectedProcedure
+    findOne: publicProcedure
         .input(z.object({ id: z.string() }))
         .query(({ ctx, input }) =>
             ctx.prisma.ability.findUnique({
@@ -16,7 +16,7 @@ export const abilityRouter = createTRPCRouter({
             })
         ),
 
-    create: protectedProcedure
+    create: publicProcedure
         .input(
             z.object({
                 name: z.string(),

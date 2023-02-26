@@ -1,14 +1,14 @@
 import { z } from "zod"
 import { pokemonSchema } from "../../../schema/pokemon"
-import { createTRPCRouter, protectedProcedure } from "../trpc"
+import { createTRPCRouter, publicProcedure } from "../trpc"
 
 export const pokemonRouter = createTRPCRouter({
-    list: protectedProcedure.query(async ({ ctx }) => {
+    list: publicProcedure.query(async ({ ctx }) => {
         const data = await ctx.prisma.pokemon.findMany()
         return data
     }),
 
-    findOne: protectedProcedure
+    findOne: publicProcedure
         .input(
             z.object({
                 id: z.string(),
@@ -27,7 +27,7 @@ export const pokemonRouter = createTRPCRouter({
             })
         }),
 
-    create: protectedProcedure
+    create: publicProcedure
         .input(pokemonSchema)
         .mutation(async ({ ctx, input }) => {
             const pokemon = await ctx.prisma.pokemon.create({
@@ -40,7 +40,7 @@ export const pokemonRouter = createTRPCRouter({
             return pokemon
         }),
 
-    delete: protectedProcedure
+    delete: publicProcedure
         .input(z.object({ id: z.string() }))
         .mutation(async ({ ctx, input }) => {
             const pokemon = await ctx.prisma.pokemon.delete({
@@ -54,7 +54,7 @@ export const pokemonRouter = createTRPCRouter({
             }
         }),
 
-    update: protectedProcedure
+    update: publicProcedure
         .input(z.object({ id: z.string(), data: pokemonSchema.partial() }))
         .mutation(async ({ ctx, input }) => {
             const pokemon = await ctx.prisma.pokemon.update({

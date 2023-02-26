@@ -1,13 +1,35 @@
 import { type NextPage } from "next"
 import Head from "next/head"
+import Image from "next/image"
 import Link from "next/link"
-import { signOut, useSession } from "next-auth/react"
+import { Fragment, useEffect } from "react"
+import { useInView } from "react-intersection-observer"
 
 import { api } from "../utils/api"
 
 const Home: NextPage = () => {
-    const { data: pokemons } = api.pokemon.list.useQuery()
-    const { data: session } = useSession()
+    const { ref, inView } = useInView()
+
+    const {
+        data: pokemonResponse,
+        fetchNextPage: fetchMorePokemon,
+        status,
+        isFetchingNextPage,
+    } = api.pokemon.list.useInfiniteQuery(
+        {
+            limit: 50,
+        },
+        {
+            getNextPageParam: (query) => query.nextCursor,
+        }
+    )
+
+    // fetch more pokemon if we reached the bottom of the list
+    useEffect(() => {
+        if (inView) {
+            void fetchMorePokemon()
+        }
+    }, [fetchMorePokemon, inView])
 
     return (
         <>
@@ -21,33 +43,40 @@ const Home: NextPage = () => {
             </Head>
 
             <main className="container mx-auto my-16 space-y-8 text-slate-700">
-                <div className="flex gap-2">
-                    <span>Hi, {session?.user.name}</span>
-                    <button onClick={() => signOut()}>Sign out</button>
-                </div>
                 <h1 className="text-4xl font-bold">Pokemon List</h1>
-                <Link
-                    href="/pokemon/new"
-                    className="inline-block rounded bg-blue-600 py-2 px-4 text-white hover:bg-blue-800"
-                >
-                    Add Pokemon
-                </Link>
-                <div className="grid grid-cols-4 gap-4">
-                    {!!pokemons?.length &&
-                        pokemons.map((pokemon) => (
-                            <Link
-                                href={`/pokemon/${pokemon.id}`}
-                                key={pokemon.id}
-                                className="rounded-lg bg-slate-100 py-4 px-4 text-center font-semibold transition-all hover:-translate-y-2"
-                            >
-                                {pokemon.name}
-                            </Link>
-                        ))}
-                </div>
 
-                {!!pokemons && !pokemons.length && (
-                    <div>No pokemon in the list</div>
+                {status === "loading" ? (
+                    <p>Loading...</p>
+                ) : status === "error" ? (
+                    <span>Error</span>
+                ) : (
+                    <>
+                        <div className="flex flex-col gap-4 ">
+                            {pokemonResponse.pages.map((page) => (
+                                <Fragment key={page.nextCursor}>
+                                    {page.entries.map((pokemon) => (
+                                        <Link
+                                            href={`/pokemon/${pokemon.id}`}
+                                            key={pokemon.id}
+                                        >
+                                            <Image
+                                                src={pokemon.artworkURL}
+                                                width={50}
+                                                height={50}
+                                                alt={pokemon.name}
+                                            />
+                                            {pokemon.name}
+                                        </Link>
+                                    ))}
+                                </Fragment>
+                            ))}
+                        </div>
+                    </>
                 )}
+                <div ref={ref} id="page-bottom-indicator" />
+                <div className={isFetchingNextPage ? "" : "hidden"}>
+                    Loading...
+                </div>
             </main>
         </>
     )

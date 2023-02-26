@@ -10,10 +10,6 @@ const PokemonInfo = () => {
         id: String(id),
     })
 
-    const { mutate: deletePokemon } = api.pokemon.delete.useMutation({
-        onSuccess: () => router.push("/"),
-    })
-
     if (isLoading) {
         return <div>Loading...</div>
     }
@@ -23,15 +19,6 @@ const PokemonInfo = () => {
             <main className="container mx-auto my-16 space-y-8 text-slate-700">
                 <Link href="/">Back</Link>
                 <h1 className="text-4xl font-bold">{pokemon?.name}</h1>
-                <button
-                    onClick={() =>
-                        deletePokemon({
-                            id: pokemon?.id ?? "",
-                        })
-                    }
-                >
-                    Delete
-                </button>
                 <div className="space-y-4">
                     <p>Id: {pokemon?.id}</p>
                     <p>

@@ -20,12 +20,7 @@ const Home: NextPage = () => {
 
             <main className="container mx-auto my-16 space-y-8 text-slate-700">
                 <h1 className="text-4xl font-bold">Pokemon List</h1>
-                <Link
-                    href="/pokemon/new"
-                    className="inline-block rounded bg-blue-600 py-2 px-4 text-white hover:bg-blue-800"
-                >
-                    Add Pokemon
-                </Link>
+
                 <div className="grid grid-cols-4 gap-4">
                     {!!pokemons?.length &&
                         pokemons.map((pokemon) => (

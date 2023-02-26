@@ -15,24 +15,4 @@ export const abilityRouter = createTRPCRouter({
                 },
             })
         ),
-
-    create: publicProcedure
-        .input(
-            z.object({
-                name: z.string(),
-                description: z.string(),
-            })
-        )
-        .mutation(async ({ ctx, input }) => {
-            const result = await ctx.prisma.ability.create({
-                data: {
-                    name: input.name.trim().toLowerCase(),
-                    description: input.description,
-                },
-            })
-            return {
-                success: true,
-                data: result,
-            }
-        }),
 })

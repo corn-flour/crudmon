@@ -4,20 +4,21 @@ import Image from "next/image"
 import Link from "next/link"
 import { Fragment, useEffect } from "react"
 import { useInView } from "react-intersection-observer"
+import { useAutoAnimate } from "@formkit/auto-animate/react"
 
 import { api } from "../utils/api"
 
 const Home: NextPage = () => {
-    const { ref, inView } = useInView()
+    const { ref: endContainer, inView } = useInView()
+    const [animationParent] = useAutoAnimate()
 
     const {
         data: pokemonResponse,
         fetchNextPage: fetchMorePokemon,
         status,
-        isFetchingNextPage,
     } = api.pokemon.list.useInfiniteQuery(
         {
-            limit: 50,
+            limit: 48,
         },
         {
             getNextPageParam: (query) => query.nextCursor,
@@ -42,13 +43,22 @@ const Home: NextPage = () => {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
 
-            <main className="space-y-8 bg-[url(/wood-bg.jpeg)]">
+            <main className="min-h-screen space-y-8 bg-[url(/wood-bg.jpeg)]">
                 <h1 className="pt-16 text-center text-4xl font-bold uppercase tracking-widest text-white">
-                    Pokedex
+                    Pokédex
                 </h1>
 
                 {status === "loading" ? (
-                    <p>Loading...</p>
+                    <div className="fixed top-1/2 left-1/2 flex w-72 -translate-y-1/2 -translate-x-1/2 flex-col items-center gap-8 rounded-xl border-2 border-black bg-slate-300/90 py-6">
+                        <Image
+                            src="/book.png"
+                            width={40}
+                            height={40}
+                            alt=""
+                            priority
+                        />
+                        <p className="text-lg text-slate-700">Loading...</p>
+                    </div>
                 ) : status === "error" ? (
                     <span>Error</span>
                 ) : (
@@ -61,6 +71,7 @@ const Home: NextPage = () => {
                                 backgroundRepeat: "repeat",
                                 backgroundSize: "100% 460px",
                             }}
+                            ref={animationParent}
                         >
                             {pokemonResponse.pages.map((page) => (
                                 <Fragment key={page.nextCursor}>
@@ -72,13 +83,15 @@ const Home: NextPage = () => {
                                     ))}
                                 </Fragment>
                             ))}
+
+                            <div
+                                ref={endContainer}
+                                id="page-bottom-indicator"
+                                className="h-[100px] w-[250px]"
+                            />
                         </div>
                     </>
                 )}
-                <div ref={ref} id="page-bottom-indicator" />
-                <div className={isFetchingNextPage ? "" : "hidden"}>
-                    Loading...
-                </div>
             </main>
         </>
     )
@@ -94,9 +107,12 @@ const PokemonCard = ({
     name: string
 }) => {
     return (
-        <Link href={`/pokemon/${id}`} className="group relative">
+        <Link
+            href={`/pokemon/${id}`}
+            className="group relative transition-all hover:-translate-y-4 focus:-translate-y-4 focus:outline-none"
+        >
             <div
-                className="relative flex h-[300px] w-[250px] flex-col items-center justify-end overflow-hidden bg-purple-900"
+                className="relative flex h-[300px] w-[250px] flex-col items-center justify-end overflow-hidden bg-purple-900 group-hover:outline group-focus:outline"
                 style={{
                     boxShadow: "12px 0 12px -8px #000000dd",
                 }}
@@ -120,19 +136,18 @@ const PokemonCard = ({
                         className="object-cover"
                     />
                 </div>
-                <div className="absolute top-5 left-4 -right-2 bottom-5 rounded-bl-3xl border-2 border-[#B6E12A] border-r-transparent p-2 text-[#B6E12A]">
+                <div className="absolute top-5 left-4 -right-2 bottom-5 rounded-bl-3xl border-2 border-[#B6E12A] border-r-transparent bg-gradient-to-b from-black/30 to-transparent p-2 text-[#B6E12A]">
                     <p className="font-mono text-2xl font-bold capitalize tracking-wider">
                         {name}
                     </p>
                     <p className="font-mono text-xl font-bold">{id}</p>
                 </div>
             </div>
+            <TriangleCaret className=" absolute left-1/2 -top-16 -translate-x-1/2 scale-y-[50%] scale-x-[60%] opacity-0 transition-all group-hover:-top-8 group-hover:opacity-100 group-focus:-top-8 group-focus:opacity-100" />
         </Link>
     )
 }
 
-// TODO:
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const TriangleCaret = ({ className }: { className?: string }) => {
     return (
         <svg

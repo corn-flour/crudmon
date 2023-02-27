@@ -1,3 +1,37 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer utilities {
+    .bg-shelf {
+        background-image: linear-gradient(
+            transparent,
+            transparent 9rem,
+            white 9rem,
+            white 9.1rem,
+            #dddddd 9.2rem,
+            #dddddd 10.5rem,
+            #00000080 10.5rem,
+            transparent 11rem
+        );
+        background-repeat: repeat;
+        background-size: 100% 13rem;
+    }
+
+    @media (min-width: 640px) {
+        .bg-shelf {
+            background-image: linear-gradient(
+                transparent,
+                transparent 18rem,
+                white 18rem,
+                white 18.2rem,
+                #dddddd 18.4rem,
+                #dddddd 20rem,
+                #00000080 20rem,
+                transparent 21.5rem
+            );
+            background-repeat: repeat;
+            background-size: 100% 28rem;
+        }
+    }
+}

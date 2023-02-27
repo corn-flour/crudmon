@@ -64,13 +64,7 @@ const Home: NextPage = () => {
                 ) : (
                     <>
                         <div
-                            className="mx-auto flex w-[95%] max-w-6xl flex-wrap justify-center gap-[10rem_1rem]"
-                            style={{
-                                backgroundImage:
-                                    "linear-gradient(transparent, transparent 300px, white 300px, white 302px, #dddddd 304px, #dddddd 332px, #00000080 332px, transparent 400px)",
-                                backgroundRepeat: "repeat",
-                                backgroundSize: "100% 460px",
-                            }}
+                            className="bg-shelf mx-auto flex w-[95%] max-w-6xl flex-wrap justify-center gap-x-8 gap-y-16 px-1 sm:gap-y-40"
                             ref={animationParent}
                         >
                             {pokemonResponse.pages.map((page) => (
@@ -112,38 +106,42 @@ const PokemonCard = ({
             className="group relative transition-all hover:-translate-y-4 focus:-translate-y-4 focus:outline-none"
         >
             <div
-                className="relative flex h-[300px] w-[250px] flex-col items-center justify-end overflow-hidden bg-purple-900 group-hover:outline group-focus:outline"
+                className="relative flex h-36 w-[7.5rem] flex-col items-center justify-end overflow-hidden bg-purple-900 group-hover:outline group-focus:outline sm:h-72 sm:w-60"
                 style={{
                     boxShadow: "12px 0 12px -8px #000000dd",
                 }}
             >
-                <div className="absolute top-1/2 aspect-square w-[95%] -translate-y-1/2">
+                <div className="absolute top-1/2 aspect-square w-[85%] -translate-y-1/2 sm:w-[95%]">
                     <Image
                         src="/pokeball.png"
                         fill
                         alt=""
+                        priority
                         className="object-contain"
                         style={{
                             filter: "invert(14%) sepia(76%) saturate(4613%) hue-rotate(271deg) brightness(79%) contrast(91%)",
                         }}
+                        sizes="285px"
                     />
                 </div>
-                <div className="relative h-4/5 w-full">
+                <div className="relative h-[70%] w-full sm:h-4/5">
                     <Image
                         src={artworkURL}
                         fill
+                        priority
                         alt={name}
-                        className="object-cover"
+                        className="object-contain sm:object-cover"
+                        sizes="300px"
                     />
                 </div>
-                <div className="absolute top-5 left-4 -right-2 bottom-5 rounded-bl-3xl border-2 border-[#B6E12A] border-r-transparent bg-gradient-to-b from-black/30 to-transparent p-2 text-[#B6E12A]">
-                    <p className="font-mono text-2xl font-bold capitalize tracking-wider">
+                <div className="absolute top-2 left-2 bottom-2 -right-1 rounded-bl-3xl border-2 border-[#B6E12A] border-r-transparent bg-gradient-to-b from-black/40 to-transparent p-1 text-[#B6E12A] sm:top-5 sm:left-4 sm:-right-2 sm:bottom-5 sm:p-2">
+                    <p className="font-mono text-sm font-bold capitalize sm:text-2xl sm:tracking-wider">
                         {name}
                     </p>
-                    <p className="font-mono text-xl font-bold">{id}</p>
+                    <p className="font-mono font-bold sm:text-xl">{id}</p>
                 </div>
             </div>
-            <TriangleCaret className=" absolute left-1/2 -top-16 -translate-x-1/2 scale-y-[50%] scale-x-[60%] opacity-0 transition-all group-hover:-top-8 group-hover:opacity-100 group-focus:-top-8 group-focus:opacity-100" />
+            <TriangleCaret className="absolute left-1/2 -top-16 -translate-x-1/2 scale-y-[50%] scale-x-[60%] opacity-0 transition-all group-hover:-top-8 group-hover:opacity-100 group-focus:-top-8 group-focus:opacity-100" />
         </Link>
     )
 }

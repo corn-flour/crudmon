@@ -21,6 +21,8 @@ const Home: NextPage = () => {
             limit: 48,
         },
         {
+            cacheTime: Infinity,
+            staleTime: Infinity,
             getNextPageParam: (query) => query.nextCursor,
         }
     )

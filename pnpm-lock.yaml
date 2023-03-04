@@ -18,6 +18,7 @@ specifiers:
   '@typescript-eslint/parser': ^5.47.1
   autoprefixer: ^10.4.7
   clsx: ^1.2.1
+  cva: npm:class-variance-authority@^0.4.0
   eslint: ^8.30.0
   eslint-config-next: 13.1.6
   next: 13.1.6
@@ -47,6 +48,7 @@ dependencies:
   '@trpc/react-query': 10.9.0_22wgxldzdfxutowffn2dykkd3i
   '@trpc/server': 10.9.0
   clsx: 1.2.1
+  cva: /class-variance-authority/0.4.0_typescript@4.9.4
   next: 13.1.6_biqbaboplfbrettd7655fr4n2y
   next-auth: 4.19.0_3vryta7zmbcsw4rrqf4axjqggm
   react: 18.2.0
@@ -835,6 +837,17 @@ packages:
 
   /chownr/1.1.4:
     resolution: {integrity: sha512-jJ0bqzaylmJtVnNgzTeSOs8DPavpbYgEr/b0YL8/2GO3xJEhInFmhKMUnEJQjZumK7KXGFhUy89PrsJWlakBVg==}
+    dev: false
+
+  /class-variance-authority/0.4.0_typescript@4.9.4:
+    resolution: {integrity: sha512-74enNN8O9ZNieycac/y8FxqgyzZhZbxmCitAtAeUrLPlxjSd5zA7LfpprmxEcOmQBnaGs5hYhiSGnJ0mqrtBLQ==}
+    peerDependencies:
+      typescript: '>= 4.5.5 < 5'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+    dependencies:
+      typescript: 4.9.4
     dev: false
 
   /client-only/0.0.1:
@@ -3040,7 +3053,6 @@ packages:
     resolution: {integrity: sha512-Uz+dTXYzxXXbsFpM86Wh3dKCxrQqUcVMxwU54orwlJjOpO3ao8L7j5lH+dWfTwgCwIuM9GQ2kvVotzYJMXTBZg==}
     engines: {node: '>=4.2.0'}
     hasBin: true
-    dev: true
 
   /unbox-primitive/1.0.2:
     resolution: {integrity: sha512-61pPlCD9h51VoreyJ0BReideM3MDKMKnh6+V9L08331ipq6Q8OFXZYiqP6n/tbHx4s5I9uRhcye6BrbkizkBDw==}

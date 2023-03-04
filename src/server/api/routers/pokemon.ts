@@ -1,5 +1,6 @@
 import { TRPCError } from "@trpc/server"
 import { z } from "zod"
+import { pokemonTypes } from "../../../utils/consts"
 import { createTRPCRouter, publicProcedure } from "../trpc"
 
 const POKE_API = "https://pokeapi.co/api/v2"
@@ -31,6 +32,61 @@ const pokemonListApiSchema = z.object({
             }
         })
         .array(),
+})
+
+const statNames = [
+    "hp",
+    "attack",
+    "defense",
+    "special-attack",
+    "special-defense",
+    "speed",
+] as const
+
+const pokemonEntrySchema = z.object({
+    id: z.number(),
+    name: z.string(),
+    types: z
+        .object({
+            slot: z.number(),
+            type: z.object({
+                name: z.enum(pokemonTypes),
+                url: z.string(),
+            }),
+        })
+        .array(),
+    weight: z.number().transform((weight) => weight / 10), // convert from hectogram to kilogram
+    height: z.number().transform((height) => height / 10), // convert from decimeter to meter
+    stats: z
+        .object({
+            base_stat: z.number(),
+            effort: z.number(),
+            stat: z.object({
+                name: z.enum(statNames),
+                url: z.string(),
+            }),
+        })
+        .array()
+        .transform((stats) => {
+            const obj = stats.reduce(
+                (prev, cur) => {
+                    return {
+                        ...prev,
+                        [cur.stat.name]: {
+                            value: cur.base_stat,
+                            ev: cur.effort,
+                        },
+                    }
+                },
+                {} as {
+                    [k in (typeof statNames)[number]]: {
+                        value: number
+                        ev: number
+                    }
+                }
+            )
+            return obj
+        }),
 })
 
 export const pokemonRouter = createTRPCRouter({
@@ -70,16 +126,16 @@ export const pokemonRouter = createTRPCRouter({
                 id: z.string(),
             })
         )
-        .query(async ({ ctx, input }) => {
-            return ctx.prisma.pokemon.findUnique({
-                where: {
-                    id: input.id,
-                },
-                include: {
-                    abilityOne: true,
-                    abilityTwo: true,
-                    hiddenAbility: true,
-                },
-            })
+        .query(async ({ input }) => {
+            try {
+                const response = await fetch(`${POKE_API}/pokemon/${input.id}`)
+                const pokemon = pokemonEntrySchema.parse(await response.json())
+                return {
+                    ...pokemon,
+                    artworkURL: `${OFFICIAL_ART_URL}/${input.id}.png`,
+                }
+            } catch (e) {
+                throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" })
+            }
         }),
 })
